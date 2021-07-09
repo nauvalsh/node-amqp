@@ -20,7 +20,7 @@ app.post('/users', async (req: Request, res: Response) => {
 });
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Hello');
+  res.send('Hello v2.0');
 });
 
 app.listen(4000, () => {
