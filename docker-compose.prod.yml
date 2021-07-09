@@ -2,6 +2,4 @@ version: '3.7'
 
 services:
   backend:
-    build:
-      target: production
-    command: node build/index.js
+    command: bash -c "npm run build && pm2-runtime build/index.js"

@@ -1,13 +1,12 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import User from './models/User';
 import Rabbitmq from './config/rabbitmq';
 
 const app = express();
 
 Rabbitmq.start();
-// RABBITMQ.consume('jobs');
 
-app.post('/users', async (req, res) => {
+app.post('/users', async (req: Request, res: Response) => {
   const newUser = await User.create({
     name: 'Nauval Shidqi',
     preferredName: 'Shid',
@@ -20,7 +19,7 @@ app.post('/users', async (req, res) => {
   res.send(newUser);
 });
 
-app.get('/', (req, res) => {
+app.get('/', (req: Request, res: Response) => {
   res.send('Hello');
 });
 
