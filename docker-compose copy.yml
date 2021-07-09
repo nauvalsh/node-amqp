@@ -9,6 +9,10 @@ services:
     depends_on:
       - db
       - rabbitmq
+    volumes:
+      - ./src:/home/node/app/src
+      - ./nodemon.json:/home/node/app/nodemon.json
+      - ./node_modules:/home/node/app/node_modules
     container_name: backend
     networks:
       - app-network
@@ -18,7 +22,7 @@ services:
       - '4000:4000'
     environment:
       WAIT_HOSTS: db:5432, rabbitmq:15672, rabbitmq:5672
-    command: npm run start
+    command: bash -c "npm run build && npm run start"
 
   db:
     container_name: db

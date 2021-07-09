@@ -1,6 +1,9 @@
 build:
 	docker-compose build --no-cache
 
+build-prod:
+	npm run build && docker-compose build --no-cache
+
 # docker-compose build --no-cache
 	
 up:
