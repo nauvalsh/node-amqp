@@ -1,17 +1,84 @@
 version: '3.7'
 
 services:
-  ts-node-docker:
+  backend:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.node
       target: base
+    depends_on:
+      - db
+      - rabbitmq
     volumes:
       - ./src:/home/node/app/src
       - ./nodemon.json:/home/node/app/nodemon.json
-    container_name: ts-node-docker
+      - ./node_modules:/home/node/app/node_modules
+    container_name: backend
+    networks:
+      - app-network
     expose:
       - '4000'
     ports:
       - '4000:4000'
     command: npm run dev
+
+  db:
+    container_name: db
+    networks:
+      - app-network
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: ts_node
+    volumes:
+      - pg_data:/var/lib/postgresql/
+
+  adminer:
+    container_name: adminer
+    networks:
+      - app-network
+    image: adminer
+    restart: always
+    depends_on:
+      - db
+    environment:
+      ADMINER_DESIGN: arcs-material
+    ports:
+      - '8080:8080'
+
+  rabbitmq:
+    build:
+      context: .
+      dockerfile: Dockerfile.rabbitmq
+    container_name: rabbitmq
+    ports:
+      - '15672:15672'
+    environment:
+      RABBITMQ_DEFAULT_USER: nauval
+      RABBITMQ_DEFAULT_PASS: nauval
+    networks:
+      - app-network
+
+  proxy:
+    image: nginx:alpine
+    container_name: web-proxy
+    restart: unless-stopped
+    volumes:
+      - ./proxy.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 80:80
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+volumes:
+  pg_data:
+
+networks:
+  app-network:
+    driver: bridge
