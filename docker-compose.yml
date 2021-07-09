@@ -20,7 +20,9 @@ services:
       - '4000'
     ports:
       - '4000:4000'
-    command: npm run dev
+    environment:
+      WAIT_HOSTS: db:5432, rabbitmq:15672, rabbitmq:5672
+    command: bash -c "npm run build && npm run start"
 
   db:
     container_name: db
