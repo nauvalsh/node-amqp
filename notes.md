@@ -14,6 +14,7 @@
 
 `https://www.squaremobius.net/amqp.node/channel_api.html`
 `https://www.cloudamqp.com/blog/rabbitmq_delayed_message_exchange_plugin_with_node_js.html`
+`https://www.cloudamqp.com/blog/part4-rabbitmq-for-beginners-exchanges-routing-keys-bindings.html`
 
 # Docker VPS
 
